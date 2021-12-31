@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./compose/local/web/Dockerfile
+    image: wagtail_portfolio_blog_web
+    command: /start
+    volumes:
+      - .:/app
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env/.dev-sample
+    depends_on:
+      - db
+
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=wagtail_portfolio_blog
+      - POSTGRES_USER=wagtail_portfolio_blog
+      - POSTGRES_PASSWORD=wagtail_portfolio_blog
+
+volumes:
+  postgres_data:

@@ -9,7 +9,7 @@ from streams.blocks import RichTextBlock, SimpleRichTextBlock, TitleandTextBlock
 
 
 class FlexPage(Page):
-    templates = 'flex/flex_page.html'
+    template = 'flex/flex_page.html'
 
     subtitle = models.CharField(max_length=100, null=True, blank=True)
     content = StreamField(

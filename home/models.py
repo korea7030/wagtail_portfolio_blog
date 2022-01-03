@@ -1,4 +1,5 @@
 from django.db import models
+from django.shortcuts import render
 
 from modelcluster.models import ParentalKey
 
@@ -6,7 +7,7 @@ from wagtail.core.models import Orderable, Page
 from wagtail.core.fields import RichTextField, StreamField
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, MultiFieldPanel, PageChooserPanel, StreamFieldPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
-
+from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from streams import blocks
 
 
@@ -26,8 +27,8 @@ class HomePageCarouseImages(Orderable):
     ]
 
 
-class HomePage(Page):
-    templates = 'home/home_page.html'
+class HomePage(RoutablePageMixin, Page):
+    template = 'home/home_page.html'
     banner_title = models.CharField(max_length=100, blank=False, null=True)
     banner_subtitle = RichTextField(features=['bold', 'itailc'], default='')
     banner_image = models.ForeignKey(
@@ -69,3 +70,10 @@ class HomePage(Page):
     class Meta:
         verbose_name = 'Home Page'
         verbose_name_plural = 'Home Pages'
+
+
+    @route(r'^subscribe/$')
+    def the_subscribe_page(self, request, *args, **kwargs):
+        context = self.get_context(request, *args, **kwargs)
+        context['a_special_test'] = 'Hello World'
+        return render(request, 'home/subscribe.html', context)

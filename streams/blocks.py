@@ -1,6 +1,7 @@
 from wagtail.core import blocks
 from wagtail.images.blocks import ImageChooserBlock
 
+
 class TitleandTextBlock(blocks.StructBlock):
     title = blocks.CharBlock(required=True, help_text='Add your title')
     text = blocks.TextBlock(required=True, help_text='Add additional text')
@@ -76,3 +77,36 @@ class CTABlock(blocks.StructBlock):
         icon = 'placeholder'
         label = 'Call to Action'
         form_classname = 'call_to_action'
+
+
+class LinkStructValue(blocks.StructValue):
+    '''Additional logic for our urls'''
+    from blog.models import BlogDetailPage
+    def url(self):
+        button_page = self.get('button_page')
+        button_url = self.get('button_url')
+
+        if button_page:
+            return button_page.url
+        elif button_url:
+            return button_url
+        
+        return None
+
+
+class ButtonBlock(blocks.StructBlock):
+    '''An external or internal URL.'''
+    button_page = blocks.PageChooserBlock(required=False, help_text='If selected, this url will be used first')
+    button_url = blocks.URLBlock(required=False, help_text='If added, this url will be used secondarily to the page')
+
+    # def get_context(self, request, *args, **kwargs):
+    #     context = super().get_context(request, *args, **kwargs)
+    #     context['latest_posts'] = BlogDetailPage.objects.live().public()[:3]
+    #     return context
+
+    class Meta:
+        template = 'streams/button_block.html'
+        icon = 'placeholder'
+        label = 'single button'
+        form_classname = 'single button'
+        value_class = LinkStructValue

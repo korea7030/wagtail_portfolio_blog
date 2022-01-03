@@ -7,7 +7,7 @@ from wagtail.core.models import Page
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 
-from streams import blocks
+from streams.blocks import RichTextBlock, SimpleRichTextBlock, TitleandTextBlock, CardBlock, CTABlock
 
 
 # Create your models here.
@@ -71,11 +71,11 @@ class BlogDetailPage(RoutablePageMixin, Page):
 
     content = StreamField(
         [
-            ('title_and_text', blocks.TitleandTextBlock()),
-            ('full_richtext', blocks.RichTextBlock()),
-            ('simple_richtext', blocks.SimpleRichTextBlock()),
-            ('cards', blocks.CardBlock()),
-            ('cta', blocks.CTABlock()),
+            ('title_and_text', TitleandTextBlock()),
+            ('full_richtext', RichTextBlock()),
+            ('simple_richtext', SimpleRichTextBlock()),
+            ('cards', CardBlock()),
+            ('cta', CTABlock()),
         ],
         null=True,
         blank=True

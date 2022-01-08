@@ -27,6 +27,17 @@
         </ul>
     </div>
 
+    <h2>Caegories</h2>
+    <ul>
+        {% for cat in self.categories.all %}
+            <li>
+                <a href="{{self.get_parent_url }}?category={{ cat.slug }}">
+                    {{ cat.name }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+
     <div class="container">
         <div class="row">
             <div class="col-lg-8 offset-lg-2">

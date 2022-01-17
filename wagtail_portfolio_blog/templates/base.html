@@ -1,4 +1,6 @@
-{% load static wagtailuserbar %}
+{% load static wagtailuserbar menus_tags %}
+
+{% get_menu "main" as navigation %}
 
 <!DOCTYPE html>
 <html class="no-js" lang="en">
@@ -39,17 +41,11 @@
           
               <div class="collapse navbar-collapse" id="navbarColor01">
                 <ul class="navbar-nav me-auto">
-                  <li class="nav-item">
-                    <a class="nav-link active" href="/">Home
-                      <span class="visually-hidden">(current)</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/blog/">Blog</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/about/">About</a>
-                  </li>
+                  {% for item in navigation.menu_items.all %}
+                        <li>
+                            <a href="{{ item.link }}" class="nav-link"{% if item.open_in_new_tab %} target="_blank"{% endif %}>{{ item.title }}</a>
+                        </li>
+                    {% endfor %}
                 </ul>
                 <!-- <form class="d-flex">
                   <input class="form-control me-sm-2" type="text" placeholder="Search">

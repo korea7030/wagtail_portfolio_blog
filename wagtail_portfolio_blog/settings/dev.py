@@ -21,6 +21,13 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/Users/jaehyunlee/wagtail_project/wagtail_portfolio_blog/cache'
+    }
+}
+
 import socket
 
 # tricks to have debug toolbar when developing with docker

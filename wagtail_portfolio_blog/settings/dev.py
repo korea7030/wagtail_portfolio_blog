@@ -24,7 +24,7 @@ INTERNAL_IPS = [
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/Users/jaehyunlee/wagtail_project/wagtail_portfolio_blog/cache'
+        'LOCATION': '/Users/jaehyunlee/wagtail_project/wagtail_portfolio_blog/wagtail_portfolio_blog/cache'
     }
 }
 

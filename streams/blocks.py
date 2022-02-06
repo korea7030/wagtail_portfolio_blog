@@ -110,3 +110,13 @@ class ButtonBlock(blocks.StructBlock):
         label = 'single button'
         form_classname = 'single button'
         value_class = LinkStructValue
+
+
+class TimelineBlock(blocks.StructBlock):
+    title = blocks.CharBlock(max_length=100)
+    text = blocks.TextBlock()
+    date = blocks.DateBlock()
+
+    class Meta:
+        icon = "placeholder"
+        template = "streams/timeline_block.html"

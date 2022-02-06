@@ -1,62 +1,60 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% load wagtailimages_tags wagtailcore_tags %}
 
-{% image self.blog_image fill-900x400 as banner %}
-
 {% block content %}
-    <section class="section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h3 class="font-tertiary mb-3">{{ self.custom_title }}</h3>
-                        <p class="font-secondary mb-5">Published by
-                            {% for iter in self.blog_authors.all %}
-                            <span class="text-primary">
-                                {{ iter.author.name }}
-                            </span>
-                            {% endfor %}
-                        </p>
-                        <div class="content">
-                            <img src="{{ banner.url }}" alt="{{ banner.alt }}" class="img-fluid rounded float-left mr-5 mb-4">
-                            {% for block in page.content %}
-                                {% include_block block %}
-                            {% endfor %}
-                        </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    {% image self.banner_image fill-1200x300 as banner %}
     <img src="{{ banner.url }}" alt="{{ banner.alt }}" style='width: 100%; height: auto;'>
-    <div class="container">
+
+    <div class="container mt-5 mb-5">
         <div class="text-center">
             <h1>{{ self.custom_title }}</h1>
+            {% if self.categories.count %}
+                <div style="padding: 0 20px 20px">
+                    {% for cat in self.categories.all %}
+                        <a href="?category={{ cat.slug }}">
+                            {{ cat.name }}
+                        </a>{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                    </div>
+            {% endif %}
+            <div class="d-flex justify-content-center">
+                {% for iter in self.blog_authors.all %}
+                    {% image iter.author.image fill-50x50 as img %}
+                    <div>
+                        <img src="{{ img.url }}" class="rounded-circle" alt="{{ iter.author.name }}">
+                    </div>
+                    {% if iter.author.website %}
+                        <a href="{{ iter.author.website }}">
+                            {{ iter.author.name }}
+                        </a>
+                    {% else %}
+                        {{ iter.author.name }}
+                    {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
         </div>
-        
-        <ul>
-            {% for iter in self.blog_authors.all %}
-            {% image iter.author.image fill-100x100 as img %}
-            <li>
-                <img src="{{ img.url }}" alt="{{ iter.author.name }}">
-                {{ iter.author.name }}
-                {% if iter.author.website %}
-                <a href="{{ iter.author.website }}">
-                    (website)
-                </a>
-                {% endif %}
-            </li>
-            {% endfor %}
-        </ul>
     </div>
 
-    <h2>Caegories</h2>
+    <h2>Categories</h2>
     <ul>
         {% for cat in self.categories.all %}
             <li>
-                <a href="{{self.get_parent_url }}?category={{ cat.slug }}">
+                <a href="{{ self.get_parent.url }}?category={{ cat.slug }}">
                     {{ cat.name }}
                 </a>
             </li>
         {% endfor %}
     </ul>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                {% for block in self.content %}
+                    {% include_block block %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

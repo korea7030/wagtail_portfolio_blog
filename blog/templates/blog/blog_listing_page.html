@@ -3,43 +3,47 @@
 {% load wagtailimages_tags wagtailroutablepage_tags cache %}
 
 {% block content %}
-    <section class="section">
-        <div class="container">
-            <div class="row">
-                {% for post in posts %}
-                    {% cache 6048000 blog_post_preview post.id %}
-                    <div class="col-lg-4 col-sm-6 mb-4">
-                        <article class="card shadow">
-                            {% image post.blog_image fill-250x250 as blog_img %}
-                            <img src="{{ blog_img.url }}" alt="{{ blog_img.alt }}" class="rounded card-img-top">
-                            <div class="card-body">
-                                <h4 class="card-title"><a class="text-dark" href="blog-single.html">{{ post.custom_title }}</a></h4>
-                                {% if post.specific.subtitle %}
-                                    <p class="cars-text">{{ post.specific.subtitle }}</p>
-                                {% endif %}
-                                <a href="{{ post.url }}" class="btn btn-xs btn-primary">Read More</a>
-                            </div>
-                        </article>
-                    </div>
-                    {% endcache %}
-                {% endfor %}
-            </div>
-        </div>
-    </section>
-    <!-- <a href="{% routablepageurl page "latest_posts" %}">View Latest Posts Only</a>
-    <h2>special link is {{ a_special_link }}</h2>
 
-    <h2>Caegories</h2>
-    <ul>
-        {% for cat in categories %}
-            <li>
+    <a href="{% routablepageurl page "latest_posts" %}">View Latest Posts Only</a>
+
+    <h2>
+        Categories:
+        <small>
+            {% for cat in categories %}
                 <a href="?category={{ cat.slug }}">
                     {{ cat.name }}
-                </a>
-            </li>
-        {% endfor %}
-    </ul> -->
+                </a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </small>
+    </h2>
 
+    <div class="container">
+        {% for post in posts %}
+            {% cache 604800 blog_post_preview post.id %}
+                <div class="row mt-5 mb-5">
+                    <div class="col-sm-3">
+                        {% image post.banner_image fill-250x250 as blog_img %}
+                        <a href="{{ post.url }}">
+                            <img src="{{ blog_img.url }}" alt="{{ blog_img.alt }}" style='width: 100%;'>
+                        </a>
+                    </div>
+                    <div class="col-sm-9">
+                        <a href="{{ post.url }}">
+                            <h2>{{ post.custom_title }}</h2>
+                            {% if post.specific.subtitle %}
+                                <p>{{ post.specific.subtitle }}</p>
+                            {% endif %}
+
+                            {# @todo add a summary field to BlogDetailPage; make it a RichTextField with only Bold and Italic enabled. #}
+                            <a href="{{ post.url }}" class="btn btn-primary mt-4">Read More</a>
+                        </a>
+                    </div>
+                </div>
+            {% endcache %}
+        {% endfor %}
+    </div>
+
+    {# Only show pagination if there is more than one page to click through #}
     {% if posts.paginator.num_pages > 1 %}
         <div class="container">
             <div class="row">
@@ -73,4 +77,7 @@
             </div>
         </div>
     {% endif %}
-{% endblock content %} 
+
+
+
+{% endblock content %}

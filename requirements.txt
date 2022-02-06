@@ -3,3 +3,4 @@ wagtail>=2.11,<2.12
 psycopg2-binary
 django-debug-toolbar==3.2.4
 django-extensions==2.1.5
+wagtail-markdown==0.6

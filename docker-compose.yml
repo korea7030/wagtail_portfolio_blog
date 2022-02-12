@@ -24,6 +24,10 @@ services:
       - POSTGRES_DB=wagtail_portfolio_blog
       - POSTGRES_USER=wagtail_portfolio_blog
       - POSTGRES_PASSWORD=wagtail_portfolio_blog
+    expose:
+      - "5432"
+    ports:
+      - 5432:5432
 
 volumes:
   postgres_data:

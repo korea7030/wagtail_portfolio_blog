@@ -44,14 +44,11 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                     </li>
-
-                    {% cache 604800 navigation %}
-                        {% for item in navigation.menu_items.all %}
-                            <li>
-                                <a href="{{ item.link }}" class="nav-link"{% if item.open_in_new_tab %} target="_blank"{% endif %}>{{ item.title }}</a>
-                            </li>
-                        {% endfor %}
-                    {% endcache %}
+                    {% for item in navigation.menu_items.all %}
+                        <li>
+                            <a href="{{ item.link }}" class="nav-link"{% if item.open_in_new_tab %} target="_blank"{% endif %}>{{ item.title }}</a>
+                        </li>
+                    {% endfor %}
                 </ul>
             <!--
               <form class="form-inline my-2 my-lg-0">

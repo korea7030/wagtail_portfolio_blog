@@ -12,10 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import environ
-
-env = environ.Env()
-environ.Env.read_env()
+from decouple import config
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -117,12 +114,12 @@ DATABASES = {
     #     "PORT": os.environ.get("SQL_PORT", "5432"),
     # }
     "default": {
-        "ENGINE": env('SQL_ENGINE'),
-        "NAME": env('SQL_DATABASE'),
-        "USER": env('SQL_USER'),
-        "PASSWORD": env('SQL_PASSWORD'),
-        "HOST": env('SQL_HOST'),
-        "PORT": env('SQL_PORT'),
+        "ENGINE": config('SQL_ENGINE'),
+        "NAME": config('SQL_DATABASE'),
+        "USER": config('SQL_USER'),
+        "PASSWORD": config('SQL_PASSWORD'),
+        "HOST": config('SQL_HOST'),
+        "PORT": config('SQL_PORT'),
     }
 }
 

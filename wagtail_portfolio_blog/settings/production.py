@@ -3,10 +3,9 @@ from __future__ import absolute_import, unicode_literals
 from wagtail_portfolio_blog.settings.dev import SECRET_KEY
 from .base import *
 import dj_database_url
-import os
+from decouple import config
 
-env = os.environ.copy()
-SECRET_KEY = env['SECRET_KEY']
+SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = False
 

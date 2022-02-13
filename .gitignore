@@ -4,5 +4,5 @@ db.sqlite3
 /*/migrations/*
 .dev_env/*
 media/*
-# .env
+.env
 /*/*/__pycache__/*

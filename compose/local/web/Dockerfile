@@ -27,4 +27,7 @@ RUN chmod +x /start
 
 WORKDIR /app
 
-ENTRYPOINT ["/entrypoint"]
+COPY ./compose/gunicorn/gunicorn_start.sh /gunicorn_start.sh
+RUN chmod +x /gunicorn_start.sh
+
+ENTRYPOINT ["bash", "/gunicorn_start.sh"]

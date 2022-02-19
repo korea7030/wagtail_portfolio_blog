@@ -1,5 +1,9 @@
 version: "3.7"
 
+volumes:
+  agent_python_gunicorn: {}
+  postgres_data:
+
 services:
   web:
     build:
@@ -9,13 +13,17 @@ services:
     command: /start
     volumes:
       - .:/app
-    ports:
-      - 8000:8000
+      - agent_python_gunicorn:/run/gunicorn
+    expose:
+      - "8000"
+      - "5432"
     env_file:
-      - ./.dev_env/.dev-sample
+      - ./blog.env
     depends_on:
       - db
-
+    networks:
+      - nginx_network
+      - db_network
   db:
     image: postgres:12.0-alpine
     volumes:
@@ -28,6 +36,26 @@ services:
       - "5432"
     ports:
       - 5432:5432
+    networks:
+      - db_network
+  nginx:
+    restart: always
+    build:
+      context: ./compose/nginx
+      dockerfile: Dockerfile
+    ports:
+      - '8000:8000'
+    volumes:
+      - agent_python_gunicorn:/run/gunicorn
+    depends_on:
+      - web
+    networks:
+      - nginx_network
+    links:
+      - web
 
-volumes:
-  postgres_data:
+networks:
+  nginx_network:
+    driver: bridge
+  db_network:
+    driver: bridge

@@ -44,7 +44,7 @@ services:
       context: ./compose/nginx
       dockerfile: Dockerfile
     ports:
-      - 80:80
+      - 8000:80
     volumes:
       - agent_python_gunicorn:/run/gunicorn
     depends_on:

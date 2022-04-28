@@ -12,8 +12,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import environ
-from decouple import config
+from dotenv import load_dotenv
+
+load_dotenv()
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -21,9 +22,8 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
-print(os.environ)
-SECRET_KEY = os.environ.get("SECRET_KEY")
-
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALLOWED_HOST = ['*']
 # Application definition
 
 INSTALLED_APPS = [
@@ -108,12 +108,12 @@ WSGI_APPLICATION = 'wagtail_portfolio_blog.wsgi.application'
 
 DATABASES = {
     "default": {
-        "ENGINE": os.environ.get("SQL_ENGINE"),
-        "NAME": os.environ.get("SQL_DATABASE", os.path.join(BASE_DIR, "db.sqlite3")),
-        "USER": os.environ.get("SQL_USER", "user"),
-        "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
-        "HOST": os.environ.get("SQL_HOST", "localhost"),
-        "PORT": os.environ.get("SQL_PORT", "5432"),
+        "ENGINE": os.getenv("SQL_ENGINE"),
+        "NAME": os.getenv("SQL_DATABASE", os.path.join(BASE_DIR, "db.sqlite3")),
+        "USER": os.getenv("SQL_USER", "user"),
+        "PASSWORD": os.getenv("SQL_PASSWORD", "password"),
+        "HOST": os.getenv("SQL_HOST", "localhost"),
+        "PORT": os.getenv("SQL_PORT", "5432"),
     }
 }
 

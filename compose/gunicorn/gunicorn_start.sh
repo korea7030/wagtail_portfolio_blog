@@ -6,7 +6,7 @@ SOCKFILE=/run/gunicorn/gunicorn.sock        # we will communicate using this uni
 USER=root                                        # the user to run as (*)
 GROUP=root                                     # the group to run as (*)
 NUM_WORKERS=4                                     # how many worker processes should Gunicorn spawn (*)
-DJANGO_SETTINGS_MODULE=wagtail_portfolio_blog.settings             # which settings file should Django use (*)
+DJANGO_SETTINGS_MODULE=wagtail_portfolio_blog.settings.production             # which settings file should Django use (*)
 DJANGO_WSGI_MODULE=wagtail_portfolio_blog.wsgi                     # WSGI module name (*)
 
 echo "Starting $NAME as `whoami`"

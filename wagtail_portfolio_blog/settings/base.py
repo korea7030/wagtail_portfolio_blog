@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 SECRET_KEY = os.getenv("SECRET_KEY")
-ALLOWED_HOST = ['*']
+ALLOWED_HOST = ['localhost', '127.0.0.1', 'wagtail_web']
 # Application definition
 
 INSTALLED_APPS = [
@@ -169,6 +169,7 @@ STATICFILES_DIRS = [
 # See https://docs.djangoproject.com/en/3.1/ref/contrib/staticfiles/#manifeststaticfilesstorage
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
+print('BASEDIR ::::::::::::: ', BASE_DIR)
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 

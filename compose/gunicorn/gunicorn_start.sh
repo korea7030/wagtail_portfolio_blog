@@ -26,4 +26,4 @@ exec gunicorn ${DJANGO_WSGI_MODULE}:application \
   --name $NAME \
   --workers $NUM_WORKERS \
   --user $USER \
-  --bind=unix:$SOCKFILE
+  --bind unix:$SOCKFILE

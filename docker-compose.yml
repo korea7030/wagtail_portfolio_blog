@@ -13,10 +13,14 @@ services:
     command: /start
     volumes:
       - .:/app
+      - ./static:/app/static
+      - ./media:/app/media
       - agent_python_gunicorn:/run/gunicorn
     expose:
-      - "8000"
-      - "5432"
+      - 8000
+      - 5432
+    ports:
+      - 8000:8000
     env_file:
       - .env
     depends_on:
@@ -24,7 +28,9 @@ services:
     networks:
       - nginx_network
       - db_network
+    tty: true
   db:
+    restart: always
     image: postgres:12.0-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
@@ -32,8 +38,6 @@ services:
       - POSTGRES_DB=wagtail_portfolio_blog
       - POSTGRES_USER=wagtail_portfolio_blog
       - POSTGRES_PASSWORD=wagtail_portfolio_blog
-    expose:
-      - "5432"
     ports:
       - 5432:5432
     networks:
@@ -41,12 +45,14 @@ services:
   nginx:
     restart: always
     build:
-      context: ./compose/nginx
+      context: ./compose/nginx/
       dockerfile: Dockerfile
     ports:
-      - 8000:80
+      - 80:80
     volumes:
       - agent_python_gunicorn:/run/gunicorn
+      - ./static:/app/static
+      - ./media:/app/media
     depends_on:
       - web
     networks:

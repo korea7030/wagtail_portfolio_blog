@@ -8,3 +8,4 @@ media/*
 /*/*/__pycache__/*
 static/
 blog.env
+.DS_Store

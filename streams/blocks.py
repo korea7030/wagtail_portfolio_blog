@@ -53,7 +53,6 @@ class SimpleRichTextBlock(blocks.RichTextBlock):
         super().__init__(**kwargs)
         self.features = [
             'bold',
-            'italic',
             'link',
         ]
 
@@ -67,7 +66,7 @@ class SimpleRichTextBlock(blocks.RichTextBlock):
 class CTABlock(blocks.StructBlock):
     '''A simple call to action section.'''
     title = blocks.CharBlock(required=True, max_length=60)
-    text = blocks.RichTextBlock(required=True, features=['bold', 'italic'])
+    text = blocks.RichTextBlock(required=True, features=['bold'])
     button_page = blocks.PageChooserBlock(required=False)
     button_url = blocks.URLBlock(required=False)
     button_text = blocks.CharBlock(required=True, default='Learn More', max_length=40)
@@ -120,3 +119,21 @@ class TimelineBlock(blocks.StructBlock):
     class Meta:
         icon = "placeholder"
         template = "streams/timeline_block.html"
+
+
+class CarouselBlock(blocks.StreamBlock):
+    image = ImageChooserBlock()
+
+    class Meta:
+        icon = "cog"
+        template = "streams/carousel_block.html"
+
+
+class FlushListBlock(blocks.StructBlock):
+    items = blocks.ListBlock(
+        blocks.TextBlock(help_text="List item's body text.")
+    )
+
+    class Meta:
+        icon = "list-ul"
+        template = "streams/flush_list_block.html"

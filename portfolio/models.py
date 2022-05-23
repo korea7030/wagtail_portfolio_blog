@@ -2,9 +2,10 @@ from django.db import models
 from wagtail.core.models import Page
 from wagtail.core.fields import StreamField
 from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel
+from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
-from wagtail.contrib.routable_page.models import RoutablePageMixin, route
-from streams.blocks import TimelineBlock
+from wagtail.contrib.routable_page.models import RoutablePageMixin
+from streams.blocks import SimpleRichTextBlock, TimelineBlock, CarouselBlock, FlushListBlock
 
 
 class PortfolioPage(RoutablePageMixin, Page):
@@ -38,16 +39,18 @@ class PortfolioPage(RoutablePageMixin, Page):
 
     def get_context(self, request):
         context = super().get_context(request)
-        project_pages = self.get_children().live().order_by('-first_published_at')
-        context['projects_pages'] = project_pages
+        context['project_pages'] = self.get_children().live().order_by('-first_published_at')
         return context
-    
+
 
 class ProjectPage(RoutablePageMixin, Page):
     project_title = models.CharField(
         max_length=150
     )
-    date = models.DateField('Article Date')
+
+    date = models.DateField('Article Date', null=True)
+    start_date = models.DateField('project start date', null=True)
+    end_date = models.DateField('project end date', null=True)
 
     intro = models.TextField(default='', null=True, blank=False)
     image = models.ForeignKey(
@@ -59,9 +62,26 @@ class ProjectPage(RoutablePageMixin, Page):
         on_delete=models.SET_NULL,
     )
 
+    content = StreamField([
+        ('richtext', SimpleRichTextBlock()),
+        ('carousel', CarouselBlock()),
+        ('flush_list', FlushListBlock())
+    ], null=True, blank=True)
+
+    testimonials = models.ForeignKey(
+        'snippets.Testimonial', 
+        on_delete=models.SET_NULL, 
+        related_name='+',
+        help_text="Project Testimonials",
+        blank=True,
+        null=True,
+    )
+
     content_panels = Page.content_panels + [
-        FieldPanel('project_title'),
-        FieldPanel('date'),
+        FieldPanel("project_title"),
+        FieldPanel("date"),
         ImageChooserPanel("image"),
         FieldPanel("intro"), 
+        StreamFieldPanel("content"),
+        # SnippetChooserPanel('testimonials'),
     ]

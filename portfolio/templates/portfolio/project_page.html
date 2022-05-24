@@ -12,7 +12,7 @@
                     <img src="{{ img.url }}" alt="{{ img.alt }}" class="img-fluid">
                 </div>
                 <h1>{{ page.project_title }}</h1>
-                <p>{{ page.start_date }}</p> ~ <p>{{ page.end_date }}</p>
+                <span>{{ page.start_date }}</span> ~ <span>{{ page.end_date }}</span>
                 <main>
                     {% for block in page.content %}
                     {% include_block block %}

@@ -115,6 +115,8 @@ class TimelineBlock(blocks.StructBlock):
     title = blocks.CharBlock(max_length=100)
     text = blocks.TextBlock()
     date = blocks.DateBlock()
+    work_start_date = blocks.DateBlock()
+    work_end_date = blocks.DateBlock()
 
     class Meta:
         icon = "placeholder"

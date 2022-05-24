@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from wagtail.core.models import Page
 from wagtail.core.fields import StreamField
 from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel
@@ -48,9 +49,12 @@ class ProjectPage(RoutablePageMixin, Page):
         max_length=150
     )
 
-    date = models.DateField('Article Date', null=True)
-    start_date = models.DateField('project start date', null=True)
-    end_date = models.DateField('project end date', null=True)
+    date = models.DateField(verbose_name='Article Date',
+        default=timezone.now)
+    start_date = models.DateField(verbose_name='Project Start Date', blank=True,
+        null=True)
+    end_date = models.DateField(verbose_name='Project End Date', blank=True,
+        null=True)
 
     intro = models.TextField(default='', null=True, blank=False)
     image = models.ForeignKey(
@@ -79,9 +83,10 @@ class ProjectPage(RoutablePageMixin, Page):
 
     content_panels = Page.content_panels + [
         FieldPanel("project_title"),
-        FieldPanel("date"),
+        FieldPanel('date'),
+        FieldPanel('start_date'),
+        FieldPanel('end_date'),
         ImageChooserPanel("image"),
         FieldPanel("intro"), 
         StreamFieldPanel("content"),
-        # SnippetChooserPanel('testimonials'),
     ]

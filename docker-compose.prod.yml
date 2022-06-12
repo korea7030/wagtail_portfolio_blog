@@ -1,0 +1,72 @@
+version: "3.7"
+
+volumes:
+  agent_python_gunicorn: {}
+  postgres_data:
+
+services:
+  web:
+    container_name: web#!/bin/sh
+      python manage.py collectstatic --no-input
+      python manage.py makemigrations
+      python manage.py migrate
+      exec "$@"
+    build:
+      context: .
+      dockerfile: ./compose/local/web/Dockerfile
+    image: wagtail_portfolio_blog_web
+    command: /start
+    volumes:
+      - .:/app
+      - ./static:/app/static
+      - ./media:/app/media
+      - agent_python_gunicorn:/run/gunicorn
+    expose:
+      - 8000
+      - 5432
+    ports:
+      - 8000:8000
+    env_file:
+      - .env
+    depends_on:
+      - db
+    networks:
+      - nginx_network
+      - db_network
+    tty: true
+  db:
+    restart: always
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=wagtail_portfolio_blog
+      - POSTGRES_USER=wagtail_portfolio_blog
+      - POSTGRES_PASSWORD=wagtail_portfolio_blog
+    ports:
+      - 5432:5432
+    networks:
+      - db_network
+  nginx:
+    restart: always
+    build:
+      context: ./compose/nginx/
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - agent_python_gunicorn:/run/gunicorn
+      - ./static:/app/static
+      - ./media:/app/media
+    depends_on:
+      - web
+    networks:
+      - nginx_network
+    links:
+      - web
+
+networks:
+  nginx_network:
+    driver: bridge
+  db_network:
+    driver: bridge

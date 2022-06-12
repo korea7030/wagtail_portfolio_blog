@@ -23,12 +23,29 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       - name: Deploy to Heroku
-        uses: AkhileshNS/heroku-deploy@v3.12.12
+        uses: pysan3/docker-compose-multiple-apps-heroku-deploy@v6.5
         with:
-          # This will be used for authentication. You can find it in your heroku homepage account settings
-          heroku_api_key: ${{secrets.HEROKU_API_APP}}
-          # Email that you use with heroku
-          heroku_email: ${{secrets.HEROKU_EMAIL}}
-          # The appname to use for deploying/updating
-          heroku_app_name: ${{secrets.HEROKU_APP}}
+          # Email linked to your Heroku account
+          email: ${{ secrets.HEROKU_EMAIL }}
+          # Your Heroku API Key
+          api_key: ${{ secrets.HEROKU_API_APP }}
+          # Your Heroku App Name
+          app_name: ${{ secrets.HEROKU_APP }}
+          # docker-compose File Path
+          docker_compose_file: './src/docker-compose.prod.yml'
+          # List of Docker Images generated from docker-compose and Heroku app names with type
+          heroku_apps: '[{"imagename": "wagtail_portfolio_blog_nginx", "appname": "wagtail_portfolio_blog_nginx_1", "apptype": "web"}, {"imagename": "wagtail_portfolio_blog_web", "appname": "wagtail_portfolio_blog_web_1", "apptype": "web"}, {"imagename": "postgres:12.0-alpine", "appname": "wagtail_portfolio_blog_db_1", "apptype": "web"}]'
+
+          env_file: ".env"
+          usedocker: true
+        env:
+          DJANGO_SETTINGS_MODULE: ${{secrets.DJANGO_SETTINGS_MODULE}}
+          GSSENCMODE: ${{secrets.GSSENCMODE}}
+          SECRET_KEY: ${{secrets.SECRET_KEY}}
+          SQL_DATABASE: ${{secrets.SQL_DATABASE}}
+          SQL_ENGINE: ${{secrets.SQL_ENGINE}}
+          SQL_HOST: ${{secrets.SQL_HOST}}
+          SQL_PASSWORD: ${{secrets.SQL_PASSWORD}}
+          SQL_PORT: ${{secrets.SQL_PORT}}
+          SQL_USER: ${{secrets.SQL_USER}}
 

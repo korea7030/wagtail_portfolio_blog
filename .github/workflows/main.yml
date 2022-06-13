@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Deploy to EC2
 
 # Controls when the workflow will run
 on:
@@ -20,32 +20,40 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      - name: Deploy to Heroku
-        uses: pysan3/docker-compose-multiple-apps-heroku-deploy@v6.5
+      - name: checkout
+        uses: actions/checkout@master
+      
+      - name: create remote directory
+        uses: appleboy/ssh-action@master
         with:
-          # Email linked to your Heroku account
-          email: ${{ secrets.HEROKU_EMAIL }}
-          # Your Heroku API Key
-          api_key: ${{ secrets.HEROKU_API_APP }}
-          # Your Heroku App Name
-          app_name: ${{ secrets.HEROKU_APP }}
-          # docker-compose File Path
-          docker_compose_file: './src/docker-compose.prod.yml'
-          # List of Docker Images generated from docker-compose and Heroku app names with type
-          heroku_apps: '[{"imagename": "wagtail_portfolio_blog_nginx", "appname": "wagtail_portfolio_blog_nginx_1", "apptype": "web"}, {"imagename": "wagtail_portfolio_blog_web", "appname": "wagtail_portfolio_blog_web_1", "apptype": "web"}, {"imagename": "postgres:12.0-alpine", "appname": "wagtail_portfolio_blog_db_1", "apptype": "web"}]'
-
-          env_file: ".env"
-          usedocker: true
-        env:
-          DJANGO_SETTINGS_MODULE: ${{secrets.DJANGO_SETTINGS_MODULE}}
-          GSSENCMODE: ${{secrets.GSSENCMODE}}
-          SECRET_KEY: ${{secrets.SECRET_KEY}}
-          SQL_DATABASE: ${{secrets.SQL_DATABASE}}
-          SQL_ENGINE: ${{secrets.SQL_ENGINE}}
-          SQL_HOST: ${{secrets.SQL_HOST}}
-          SQL_PASSWORD: ${{secrets.SQL_PASSWORD}}
-          SQL_PORT: ${{secrets.SQL_PORT}}
-          SQL_USER: ${{secrets.SQL_USER}}
-
+          host: ${{ secrets.HOST }}
+          username: ubuntu
+          key: ${{ secrets.KEY }}
+          script: mkdir -p /home/ubuntu/srv
+      - name: copy source via ssh key
+        uses: burnett01/rsync-deployments@4.1
+        with:
+          switches: -avzr --delete
+          remote_path: /home/ubuntu/srv/
+          remote_host: ${{ secrets.HOST }}
+          remote_user: ubuntu
+          remote_key: ${{ secrets.KEY }}
+      - name: create env file
+        run: |
+          touch /home/ubuntu/srv/wagtail_portfolio_blog/.env
+          echo "${{ secrets.DJANGO_SETTINGS_MODULE }}" >> /home/ubuntu/srv/wagtail_portfolio_blog/.env
+          echo "${{ secrets.SECRET_KEY }}" >> /home/ubuntu/srv/wagtail_portfolio_blog/.env
+          echo "${{ secrets.SQL_ENGINE }}" >> /home/ubuntu/srv/wagtail_portfolio_blog/.env
+          echo "${{ secrets.SQL_DATABASE }}" >> /home/ubuntu/srv/wagtail_portfolio_blog/.env
+          echo "${{ secrets.SQL_USER }}" >> /home/ubuntu/srv/wagtail_portfolio_blog/.env
+          echo "${{ secrets.SQL_PASSWORD }}" >> /home/ubuntu/srv/wagtail_portfolio_blog/.env
+          echo "${{ secrets.SQL_HOST }}" >> /home/ubuntu/srv/wagtail_portfolio_blog/.env
+          echo "${{ secrets.SQL_PORT }}" >> /home/ubuntu/srv/wagtail_portfolio_blog/.env
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ubuntu
+          key: ${{ secrets.KEY }}
+          script: |
+            ****sh /home/ubuntu/srv/wagtail_portfolio_blog/compose/deploy.sh

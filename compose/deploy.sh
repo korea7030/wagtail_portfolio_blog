@@ -24,4 +24,4 @@ then
 fi
 
 echo "start docker-compose up: ubuntu"
-sudo docker-compose -f /home/ubuntu/srv/wagtail_portfolio_blog/docker-compose.prod.yml up --build -d
+sudo docker-compose -f /home/ubuntu/srv/docker-compose.prod.yml up --build -d

@@ -40,15 +40,15 @@ jobs:
           remote_key: ${{ secrets.KEY }}
       - name: create env file
         run: |
-          touch /home/ubuntu/srv/wagtail_portfolio_blog/.env
-          echo "${{ secrets.DJANGO_SETTINGS_MODULE }}" >> /home/ubuntu/srv/wagtail_portfolio_blog/.env
-          echo "${{ secrets.SECRET_KEY }}" >> /home/ubuntu/srv/wagtail_portfolio_blog/.env
-          echo "${{ secrets.SQL_ENGINE }}" >> /home/ubuntu/srv/wagtail_portfolio_blog/.env
-          echo "${{ secrets.SQL_DATABASE }}" >> /home/ubuntu/srv/wagtail_portfolio_blog/.env
-          echo "${{ secrets.SQL_USER }}" >> /home/ubuntu/srv/wagtail_portfolio_blog/.env
-          echo "${{ secrets.SQL_PASSWORD }}" >> /home/ubuntu/srv/wagtail_portfolio_blog/.env
-          echo "${{ secrets.SQL_HOST }}" >> /home/ubuntu/srv/wagtail_portfolio_blog/.env
-          echo "${{ secrets.SQL_PORT }}" >> /home/ubuntu/srv/wagtail_portfolio_blog/.env
+          touch /home/ubuntu/srv/.env
+          echo "${{ secrets.DJANGO_SETTINGS_MODULE }}" >> /home/ubuntu/srv/.env
+          echo "${{ secrets.SECRET_KEY }}" >> /home/ubuntu/srv/.env
+          echo "${{ secrets.SQL_ENGINE }}" >> /home/ubuntu/srv/.env
+          echo "${{ secrets.SQL_DATABASE }}" >> /home/ubuntu/srv/.envnv
+          echo "${{ secrets.SQL_USER }}" >> /home/ubuntu/srv/.env
+          echo "${{ secrets.SQL_PASSWORD }}" >> /home/ubuntu/srv/.envnv
+          echo "${{ secrets.SQL_HOST }}" >> /home/ubuntu/srv/.env
+          echo "${{ secrets.SQL_PORT }}" >> /home/ubuntu/srv/.env
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
         with:
@@ -56,4 +56,4 @@ jobs:
           username: ubuntu
           key: ${{ secrets.KEY }}
           script: |
-            ****sh /home/ubuntu/srv/wagtail_portfolio_blog/compose/deploy.sh
+            ****sh /home/ubuntu/srv/compose/deploy.sh

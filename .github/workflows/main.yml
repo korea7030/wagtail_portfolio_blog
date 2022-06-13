@@ -39,6 +39,7 @@ jobs:
           remote_user: ubuntu
           remote_key: ${{ secrets.KEY }}
       - name: create env file
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ubuntu

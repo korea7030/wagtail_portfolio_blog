@@ -44,7 +44,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ubuntu
           key: ${{ secrets.KEY }}
-          run: |
+          script: |
             touch /home/ubuntu/srv/.env
             echo "${{ secrets.DJANGO_SETTINGS_MODULE }}" >> /home/ubuntu/srv/.env
             echo "${{ secrets.SECRET_KEY }}" >> /home/ubuntu/srv/.env

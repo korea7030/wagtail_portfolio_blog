@@ -39,16 +39,20 @@ jobs:
           remote_user: ubuntu
           remote_key: ${{ secrets.KEY }}
       - name: create env file
-        run: |
-          touch /home/ubuntu/srv/.env
-          echo "${{ secrets.DJANGO_SETTINGS_MODULE }}" >> /home/ubuntu/srv/.env
-          echo "${{ secrets.SECRET_KEY }}" >> /home/ubuntu/srv/.env
-          echo "${{ secrets.SQL_ENGINE }}" >> /home/ubuntu/srv/.env
-          echo "${{ secrets.SQL_DATABASE }}" >> /home/ubuntu/srv/.envnv
-          echo "${{ secrets.SQL_USER }}" >> /home/ubuntu/srv/.env
-          echo "${{ secrets.SQL_PASSWORD }}" >> /home/ubuntu/srv/.envnv
-          echo "${{ secrets.SQL_HOST }}" >> /home/ubuntu/srv/.env
-          echo "${{ secrets.SQL_PORT }}" >> /home/ubuntu/srv/.env
+        with:
+          host: ${{ secrets.HOST }}
+          username: ubuntu
+          key: ${{ secrets.KEY }}
+          run: |
+            touch /home/ubuntu/srv/.env
+            echo "${{ secrets.DJANGO_SETTINGS_MODULE }}" >> /home/ubuntu/srv/.env
+            echo "${{ secrets.SECRET_KEY }}" >> /home/ubuntu/srv/.env
+            echo "${{ secrets.SQL_ENGINE }}" >> /home/ubuntu/srv/.env
+            echo "${{ secrets.SQL_DATABASE }}" >> /home/ubuntu/srv/.envnv
+            echo "${{ secrets.SQL_USER }}" >> /home/ubuntu/srv/.env
+            echo "${{ secrets.SQL_PASSWORD }}" >> /home/ubuntu/srv/.envnv
+            echo "${{ secrets.SQL_HOST }}" >> /home/ubuntu/srv/.env
+            echo "${{ secrets.SQL_PORT }}" >> /home/ubuntu/srv/.env
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
         with:

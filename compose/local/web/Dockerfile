@@ -4,14 +4,14 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
 # Install system packages required by Wagtail and Django.
-RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-recommends \
-    build-essential \
-    libpq-dev \
-    libmariadbclient-dev \
-    libjpeg62-turbo-dev \
-    zlib1g-dev \
-    libwebp-dev \
- && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-recommends \
+#     build-essential \
+#     libpq-dev \
+#     libmariadbclient-dev \
+#     libjpeg62-turbo-dev \
+#     zlib1g-dev \
+#     libwebp-dev \
+#  && rm -rf /var/lib/apt/lists/*
 
 # Requirements are installed here to ensure they will be cached.
 COPY ./requirements.txt /requirements.txt
